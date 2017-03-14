@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -20,6 +21,7 @@ import com.facebook.login.widget.LoginButton;
 
 public class MainActivity extends AppCompatActivity {
 LoginButton loginButton;
+    TextView txtStatus;
     CallbackManager callbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,29 +42,35 @@ LoginButton loginButton;
         });
 
         initializeControls();
+        loginWithFB();
+     }
+
+    private void initializeControls(){
+        loginButton=(LoginButton)findViewById(R.id.login_button);
+        txtStatus=(TextView)findViewById(R.id.txtstatus);
+    }
+    private void loginWithFB(){
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
+                        txtStatus.setText("Login Succes\n"+loginResult.getAccessToken());
                     }
 
                     @Override
                     public void onCancel() {
                         // App code
+                        txtStatus.setText("login Cancelled");
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
+                        txtStatus.setText("Login Error: ");
                     }
                 });
     }
-
-    private void initializeControls(){
-        loginButton=(LoginButton)findViewById(R.id.login_button);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
